@@ -14,13 +14,13 @@ export default function Dashboard() {
     try {
       await logout()
       history.push("/login")
-    } catch {
+    } catch (err) {
       setError("Failed to log out")
     }
   }
 
   return (
-    <>
+    <div>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Profile</h2>
@@ -36,6 +36,6 @@ export default function Dashboard() {
           Log Out
         </Button>
       </div>
-    </>
+    </div>
   )
 }

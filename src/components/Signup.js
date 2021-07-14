@@ -24,7 +24,7 @@ export default function Signup() {
       setLoading(true)
       await signup(emailRef.current.value, passwordRef.current.value)
       history.push("/")
-    } catch {
+    } catch (err) {
       setError("Failed to create an account")
     }
 
@@ -32,7 +32,7 @@ export default function Signup() {
   }
 
   return (
-    <>
+    <div>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Sign Up</h2>
@@ -59,6 +59,6 @@ export default function Signup() {
       <div className="w-100 text-center mt-2">
         Already have an account? <Link to="/login">Log In</Link>
       </div>
-    </>
+    </div>
   )
 }

@@ -42,7 +42,7 @@ export default function UpdateProfile() {
   }
 
   return (
-    <>
+    <div>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Update Profile</h2>
@@ -82,6 +82,6 @@ export default function UpdateProfile() {
       <div className="w-100 text-center mt-2">
         <Link to="/">Cancel</Link>
       </div>
-    </>
+    </div>
   )
 }
