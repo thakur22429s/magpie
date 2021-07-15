@@ -2,6 +2,12 @@ import React, { useRef, useState } from "react"
 import { Form, Button, Card, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import {MDCRipple} from '@material/ripple';
+
+const selector = '.mdc-button, .mdc-icon-button, .mdc-card__primary-action';
+const ripples = [].map.call(document.querySelectorAll(selector), function(el) {
+  return new MDCRipple(el);
+});
 
 export default function Login() {
   const emailRef = useRef()
@@ -28,6 +34,10 @@ export default function Login() {
 
   return (
     <div>
+      <div class="mdc-card">
+        Hello from MDC!
+      </div>
+
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Log In</h2>

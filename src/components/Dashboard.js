@@ -2,11 +2,21 @@ import React, { useState } from "react"
 import { Card, Button, Alert } from "react-bootstrap"
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useHistory } from "react-router-dom"
+import Axios from 'axios'
 
 export default function Dashboard() {
   const [error, setError] = useState("")
   const { currentUser, logout } = useAuth()
   const history = useHistory()
+  const [movieRec, setMovieRec] = useState('')
+  
+  const getRec = () => {
+    Axios.get("https://api.themoviedb.org/3/movie/top_rated?api_key=e5a142829dadd0a70108fbd4337b0088&language=en-US&page=1").then((response) => {
+      console.log(response)
+      setMovieRec(response.data.results[1].original_title)
+    })
+  }
+
 
   async function handleLogout() {
     setError("")
@@ -21,6 +31,9 @@ export default function Dashboard() {
 
   return (
     <div>
+      <h2>
+        {movieRec}
+      </h2>
       <Card>
         <Card.Body>
           <h2 className="text-center mb-4">Profile</h2>
@@ -34,6 +47,9 @@ export default function Dashboard() {
       <div className="w-100 text-center mt-2">
         <Button variant="link" onClick={handleLogout}>
           Log Out
+        </Button>
+        <Button onClick={getRec}>
+          Get API Data
         </Button>
       </div>
     </div>
