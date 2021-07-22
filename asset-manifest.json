@@ -1,6 +1,14 @@
 {
-  "main.css": "static/css/main.0124c980.css",
-  "main.css.map": "static/css/main.0124c980.css.map",
-  "main.js": "static/js/main.31005769.js",
-  "main.js.map": "static/js/main.31005769.js.map"
+  "main.css": "static/css/main.da453ecd.css",
+  "main.css.map": "static/css/main.da453ecd.css.map",
+  "main.js": "static/js/main.dfe83c37.js",
+  "main.js.map": "static/js/main.dfe83c37.js.map",
+  "static/media/roboto-all-400-normal.woff": "static/media/roboto-all-400-normal.73f26bf9.woff",
+  "static/media/roboto-cyrillic-400-normal.woff2": "static/media/roboto-cyrillic-400-normal.ba2c6cb0.woff2",
+  "static/media/roboto-cyrillic-ext-400-normal.woff2": "static/media/roboto-cyrillic-ext-400-normal.2e0b8660.woff2",
+  "static/media/roboto-greek-400-normal.woff2": "static/media/roboto-greek-400-normal.22786f24.woff2",
+  "static/media/roboto-greek-ext-400-normal.woff2": "static/media/roboto-greek-ext-400-normal.71683b6b.woff2",
+  "static/media/roboto-latin-400-normal.woff2": "static/media/roboto-latin-400-normal.aa23b7b4.woff2",
+  "static/media/roboto-latin-ext-400-normal.woff2": "static/media/roboto-latin-ext-400-normal.718dded3.woff2",
+  "static/media/roboto-vietnamese-400-normal.woff2": "static/media/roboto-vietnamese-400-normal.756af8e5.woff2"
 }
