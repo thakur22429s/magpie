@@ -11,7 +11,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Alert from "@material-ui/lab/Alert";
-import CustomAppBar from "./CustomAppBar";
+
+const BASE_URL = "https://api.themoviedb.org/3";
+const api_key = "e5a142829dadd0a70108fbd4337b0088";
 
 function Copyright() {
   return (
@@ -55,17 +57,24 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  const [movieRec, setMovieRec] = useState("");
+  //const [movieRec, setMovieRec] = useState("");
   const classes = useStyles();
+  const api = Axios.create({ baseURL: BASE_URL });
+  const [data, setData] = useState([]);
 
-  const getRec = () => {
-    Axios.get(
-      "https://api.themoviedb.org/3/movie/top_rated?api_key=e5a142829dadd0a70108fbd4337b0088&language=en-US&page=1"
-    ).then((response) => {
-      console.log(response);
-      setMovieRec(response.data.results[1].original_title);
+  const getUpcoming = () => {
+    api.get("movie/upcoming", { params: { api_key } }).then((response) => {
+      setData(response.data.results);
     });
   };
+
+  const getTrendingDaily = () => {
+    api.get("trending/all/day", { params: { api_key } }).then((response) => {
+      setData(response.data.results);
+    });
+  };
+
+  const getImage = (path) => `https://image.tmdb.org/t/p/w500/${path}`;
 
   async function handleLogout() {
     setError("");
@@ -80,8 +89,6 @@ export default function Dashboard() {
 
   return (
     <div>
-      <CustomAppBar />
-      <h2>{movieRec}</h2>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -93,14 +100,12 @@ export default function Dashboard() {
             display="inline"
             noWrap
           >
-            <strong>
-            Email: 
-            </strong>
+            <strong>Email:</strong>
             &nbsp;
             {currentUser.email}
           </Typography>
-          <br/>
-          <br/>
+          <br />
+          <br />
           <Link
             to="/update-profile"
             color="textSecondary"
@@ -122,15 +127,35 @@ export default function Dashboard() {
         </Button>
         <Button
           size="large"
-          onClick={getRec}
+          onClick={getUpcoming}
           type="submit"
           fullWidth
           variant="contained"
           color="secondary"
           className={classes.submit}
         >
-          Get API Data
+          Get Upcoming Movies
         </Button>
+        <Button
+          size="large"
+          onClick={getTrendingDaily}
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          className={classes.submit}
+        >
+          Get Daily Trending
+        </Button>
+        {data.map((movie) => (
+          <div>
+            <img
+              src={getImage(movie.poster_path)}
+              alt="Movie poster goes here"
+            />
+            <p>{movie.original_title}</p>
+          </div>
+        ))}
         <Box mt={8}>
           <Copyright />
         </Box>
@@ -138,24 +163,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-/*
-<Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Profile</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong> {currentUser.email}
-          <Link to="/update-profile" className="btn btn-primary w-100 mt-3">
-            Update Profile
-          </Link>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
-          Log Out
-        </Button>
-        <Button onClick={getRec}>
-          Get API Data
-        </Button>
-      </div>
-*/
