@@ -59,22 +59,29 @@ export default function Dashboard() {
   const history = useHistory();
   //const [movieRec, setMovieRec] = useState("");
   const classes = useStyles();
-  const api = Axios.create({ baseURL: BASE_URL });
-  const [data, setData] = useState([]);
+  //const api = Axios.create({ baseURL: BASE_URL });
+  //const [data, setData] = useState([]);
 
-  const getUpcoming = () => {
-    api.get("movie/upcoming", { params: { api_key } }).then((response) => {
-      setData(response.data.results);
-    });
-  };
+  // const getUpcoming = () => {
+  //   api.get("movie/upcoming", { params: { api_key } }).then((response) => {
+  //     setData(response.data.results);
+  //   });
+  // };
 
-  const getTrendingDaily = () => {
-    api.get("trending/all/day", { params: { api_key } }).then((response) => {
-      setData(response.data.results);
-    });
-  };
+  // const getTrendingDaily = () => {
+  //   api.get("trending/all/day", { params: { api_key } }).then((response) => {
+  //     setData(response.data.results);
+  //   });
+  // };
 
-  const getImage = (path) => `https://image.tmdb.org/t/p/w500/${path}`;
+  // const getCertifications = () => {
+  //   api.get("certification/movie/list", { params: { api_key } }).then((response) => {
+  //     console.log(response.data);
+  //     setData(response.data.results);
+  //   });
+  // };
+
+  // const getImage = (path) => `https://image.tmdb.org/t/p/w500/${path}`;
 
   async function handleLogout() {
     setError("");
@@ -116,6 +123,36 @@ export default function Dashboard() {
         </div>
         <Button
           size="large"
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          className={classes.submit}
+        >
+          <Link
+            color="inherit"
+            component={RouteLink}
+            to="/recommend"
+            variant="body1"
+            underline="none"
+            style={{ textDecoration: 'none' }}
+          >
+            {"Get Your Recommendation"}
+          </Link>
+        </Button>
+        {/* <Button
+          size="large"
+          onClick={getGenres}
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          className={classes.submit}
+        >
+          Get Genres
+        </Button> */}
+        <Button
+          size="large"
           onClick={handleLogout}
           type="submit"
           fullWidth
@@ -125,6 +162,7 @@ export default function Dashboard() {
         >
           Log Out
         </Button>
+        {/*
         <Button
           size="large"
           onClick={getUpcoming}
@@ -147,7 +185,18 @@ export default function Dashboard() {
         >
           Get Daily Trending
         </Button>
-        {data.map((movie) => (
+        <Button
+          size="large"
+          onClick={getCertifications}
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="secondary"
+          className={classes.submit}
+        >
+          Get Certifications
+        </Button>
+        {/* {data.map((movie) => (
           <div>
             <img
               src={getImage(movie.poster_path)}
@@ -155,7 +204,8 @@ export default function Dashboard() {
             />
             <p>{movie.original_title}</p>
           </div>
-        ))}
+        ))} */}
+        {/*JSON.stringify(data)*/}
         <Box mt={8}>
           <Copyright />
         </Box>
