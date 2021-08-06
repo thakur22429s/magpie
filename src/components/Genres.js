@@ -4,7 +4,13 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { List, ListItem, ListItemText, ListItemIcon } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  GridList,
+} from "@material-ui/core";
 import { strings } from "@material/textfield";
 
 const genres = [
@@ -87,7 +93,7 @@ const genres = [
 ];
 
 export default function Genres() {
-  const [genresReq, setGenresReq ] = useState([]);
+  const [genresReq, setGenresReq] = useState([]);
   let genreArray = [];
 
   const handleToggle = (e) => {
@@ -100,13 +106,13 @@ export default function Genres() {
       genreArray.push(e.target.value);
       setGenresReq(genreArray);
       //console.log("Entered checked and not already added!");
-    } else if (! e.target.checked && index !== -1) {
+    } else if (!e.target.checked && index !== -1) {
       genreArray.splice(index, 1);
       //console.log("Entered unchecked and already added!");
     } else {
       /*console.log("Entered last condition!");*/
     }
-  }
+  };
 
   return (
     <React.Fragment>
@@ -117,7 +123,7 @@ export default function Genres() {
         Please select the genres you are interested in:
       </Typography>
 
-      <List>
+      <GridList cols={5} cellHeight={50} style={{ paddingLeft: '5%' }}>
         {genres.map((item) => (
           <ListItem key={item.name}>
             <ListItemIcon>
@@ -130,7 +136,7 @@ export default function Genres() {
             <ListItemText primary={item.name} />
           </ListItem>
         ))}
-      </List>
+      </GridList>
     </React.Fragment>
   );
 }
