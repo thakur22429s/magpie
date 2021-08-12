@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  GridList,
-} from "@material-ui/core";
-import { strings } from "@material/textfield";
+import Button from "@material-ui/core/Button";
+import { Field, Form, Formik, useField } from "formik";
+import { CheckboxWithLabel } from "formik-material-ui";
+
+const MyCheckbox = ({ label, ...props }) => {
+  const [field] = useField(props);
+  return <FormControlLabel {...field} control={<Checkbox />} label={label} />;
+};
 
 const genres = [
   {
@@ -115,28 +112,76 @@ export default function Genres() {
   };
 
   return (
-    <React.Fragment>
-      <Typography variant="h4" gutterBottom>
-        Genres
-      </Typography>
-      <Typography variant="h6" gutterBottom>
-        Please select the genres you are interested in:
-      </Typography>
+    <div>
+      <Formik
+        initialValues={{ genresArray: [] }}
+        onSubmit={(data, { setSubmitting }) => {
+          setSubmitting(true);
 
-      <GridList cols={5} cellHeight={50} style={{ paddingLeft: '5%' }}>
-        {genres.map((item) => (
-          <ListItem key={item.name}>
-            <ListItemIcon>
-              <Checkbox
-                edge="start"
-                value={item.id}
-                onChange={(e) => handleToggle(e)}
-              />
-            </ListItemIcon>
-            <ListItemText primary={item.name} />
-          </ListItem>
-        ))}
-      </GridList>
-    </React.Fragment>
+          //make async call
+
+          console.log(data);
+
+          setSubmitting(false);
+        }}
+      >
+        {({ values, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
+          <Form onSubmit={handleSubmit} onChange={handleChange}>
+            {genres.map((item) => (
+              <label>
+                <Field
+                  type="checkbox"
+                  name="genresArray"
+                  value={item.id}
+                  as={Checkbox}
+                />
+                {item.name}
+              </label>
+
+              // <MyCheckbox
+              //   name="genresArray"
+              //   type="checkbox"
+              //   value={item.id}
+              //   label={item.name}
+              // />
+            ))}
+
+            <div>
+              <p>{JSON.stringify(values, null, 2)}</p>
+            </div>
+
+            <div>
+              <Button disabled={isSubmitting} type="submit">
+                SUBMIT PART 1
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
+
+    // <React.Fragment>
+    //   <Typography variant="h4" gutterBottom>
+    //     Genres
+    //   </Typography>
+    //   <Typography variant="h6" gutterBottom>
+    //     Please select the genres you are interested in:
+    //   </Typography>
+
+    //   <GridList cols={5} cellHeight={50} style={{ paddingLeft: '5%' }}>
+    //     {genres.map((item) => (
+    //       <ListItem key={item.name}>
+    //         <ListItemIcon>
+    //           <Checkbox
+    //             edge="start"
+    //             value={item.id}
+    //             onChange={(e) => handleToggle(e)}
+    //           />
+    //         </ListItemIcon>
+    //         <ListItemText primary={item.name} />
+    //       </ListItem>
+    //     ))}
+    //   </GridList>
+    // </React.Fragment>
   );
 }
