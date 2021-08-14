@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link as RouteLink, useHistory } from "react-router-dom";
-import Axios from "axios";
 import "@fontsource/roboto";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -11,9 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Alert from "@material-ui/lab/Alert";
-
-const BASE_URL = "https://api.themoviedb.org/3";
-const api_key = "e5a142829dadd0a70108fbd4337b0088";
 
 function Copyright() {
   return (

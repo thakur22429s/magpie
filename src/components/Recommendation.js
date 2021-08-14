@@ -1,9 +1,17 @@
 import React, { useState } from "react";
+import Axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
+import { alpha } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
 import Link from "@material-ui/core/Link";
-import { FormControl, MenuItem, InputLabel, Select } from "@material-ui/core";
+import {
+  FormControl,
+  MenuItem,
+  InputLabel,
+  Select,
+  Button,
+} from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Typography from "@material-ui/core/Typography";
 import { Form, Formik, useField } from "formik";
@@ -17,9 +25,10 @@ import {
   faArrowCircleDown,
   faArrowCircleUp,
 } from "@fortawesome/free-solid-svg-icons";
-import { Fragment } from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import { date } from "yup/lib/locale";
+
+const BASE_URL = "https://api.themoviedb.org/3";
+const api_key = "e5a142829dadd0a70108fbd4337b0088";
 
 const MyCheckbox = ({ label, ...props }) => {
   const [field] = useField(props);
@@ -69,6 +78,9 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     minWidth: 275,
   },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 export default function Recommendation() {
@@ -85,6 +97,42 @@ export default function Recommendation() {
   var date =
     today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
 
+  var dateAfter =
+    selectedDateAfter.getFullYear() +
+    "-" +
+    ("0" + (selectedDateAfter.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + selectedDateAfter.getDate()).slice(-2);
+  var dateBefore =
+    selectedDateBefore.getFullYear() +
+    "-" +
+    ("0" + (selectedDateBefore.getMonth() + 1)).slice(-2) +
+    "-" +
+    ("0" + selectedDateBefore.getDate()).slice(-2);
+
+  const api = Axios.create({ baseURL: BASE_URL });
+  const [movieData, setMovieData] = useState([]);
+
+  const getMovieRec = (encodedGenreString) => {
+    api
+      .get("discover/movie", {
+        params: {
+          api_key: api_key,
+          sort_by: sort,
+          page: 1,
+          "release_date.gte": dateAfter,
+          "release_date.lte": dateBefore,
+          with_genres: encodedGenreString,
+        },
+      })
+      .then((response) => {
+        setMovieData(response.data.results);
+        console.log(response);
+      });
+  };
+
+  const getImage = (path) => `https://image.tmdb.org/t/p/w500/${path}`;
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -98,20 +146,16 @@ export default function Recommendation() {
           Get Your Movie Recommendation
         </Typography>
 
-        <Divider variant="middle" />
-
         <Formik
-          validationSchema={object({
-            genresArray: array().length(
-              3,
-              "You can only select the top 3 genres!"
-            ),
-          })}
           initialValues={{
             genresArray: [],
           }}
           onSubmit={(data) => {
             console.log(data);
+
+            let encodedGenreString = data.genresArray.toString();
+
+            getMovieRec(encodedGenreString);
           }}
         >
           {({ values, handleBlur, handleSubmit }) => (
@@ -346,12 +390,39 @@ export default function Recommendation() {
                 </Grid>
               </Grid>
 
+              <div>
+                <Button
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  className={classes.submit}
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              </div>
+
               {/* <div>
                 <p>{JSON.stringify(values, null, 2)}</p>
               </div> */}
             </Form>
           )}
         </Formik>
+
+        {movieData.map((movie) => (
+          <div>
+            <img src={getImage(movie.poster_path)} />
+            <Typography
+              component="h3"
+              variant="h4"
+              align="center"
+              color="secondary"
+            >
+              {movie.original_title}
+            </Typography>
+          </div>
+        ))}
 
         <Copyright />
       </Paper>
