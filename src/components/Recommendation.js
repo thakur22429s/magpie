@@ -1,16 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
+import { FormControl, MenuItem, InputLabel, Select } from "@material-ui/core";
+import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Typography from "@material-ui/core/Typography";
-import Genres from "./Genres";
-import Keywords from "./Keywords";
-import Misc from "./Misc";
+import { Form, Formik, useField } from "formik";
+import { Grid } from "@material-ui/core";
+import { object, array } from "yup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import { Divider } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowCircleDown,
+  faArrowCircleUp,
+} from "@fortawesome/free-solid-svg-icons";
+import { Fragment } from "react";
+import DateFnsUtils from "@date-io/date-fns";
+import { date } from "yup/lib/locale";
+
+const MyCheckbox = ({ label, ...props }) => {
+  const [field] = useField(props);
+  return <FormControlLabel {...field} control={<Checkbox />} label={label} />;
+};
 
 function Copyright() {
   return (
@@ -36,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: "5%",
     paddingTop: "2%",
     paddingBottom: "2%",
+    rowGap: "2rem",
   },
   stepper: {
     backgroundColor: "#21130d",
@@ -51,34 +66,24 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
     marginBottom: theme.spacing(3),
   },
+  formControl: {
+    minWidth: 275,
+  },
 }));
-
-const steps = ["Genres", "Keywords and People", "Ratings and Reviews"];
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return <Genres />;
-    case 1:
-      return <Keywords />;
-    case 2:
-      return <Misc />;
-    default:
-      throw new Error("Unknown step");
-  }
-}
 
 export default function Recommendation() {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [sort, setSort] = React.useState("");
+  const [selectedDateAfter, handleDateChangeAfter] = useState(new Date());
+  const [selectedDateBefore, handleDateChangeBefore] = useState(new Date());
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
+  const handleChange = (event) => {
+    setSort(event.target.value);
   };
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  var today = new Date();
+  var date =
+    today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
 
   return (
     <React.Fragment>
@@ -92,43 +97,262 @@ export default function Recommendation() {
         >
           Get Your Movie Recommendation
         </Typography>
-        <Stepper activeStep={activeStep} className={classes.stepper}>
-          {steps.map((label) => (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-        <React.Fragment>
-          {activeStep === steps.length ? (
-            <React.Fragment>
-              <Typography variant="h5" gutterBottom>
-                Thank you.
-              </Typography>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
-              {getStepContent(activeStep)}
-              <div className={classes.buttons}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} className={classes.button}>
-                    Back
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNext}
-                  className={classes.button}
-                >
-                  {activeStep === steps.length - 1
-                    ? "Get Recommendation"
-                    : "Next"}
-                </Button>
-              </div>
-            </React.Fragment>
+
+        <Divider variant="middle" />
+
+        <Formik
+          validationSchema={object({
+            genresArray: array().length(
+              3,
+              "You can only select the top 3 genres!"
+            ),
+          })}
+          initialValues={{
+            genresArray: [],
+          }}
+          onSubmit={(data) => {
+            console.log(data);
+          }}
+        >
+          {({ values, handleBlur, handleSubmit }) => (
+            <Form autoComplete="off" onSubmit={handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="28"
+                    label="Action"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="12"
+                    label="Adventure"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="16"
+                    label="Animation"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="35"
+                    label="Comedy"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="80"
+                    label="Crime"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="99"
+                    label="Documentary"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="18"
+                    label="Drama"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="10751"
+                    label="Family"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="14"
+                    label="Fantasy"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="36"
+                    label="History"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="27"
+                    label="Horror"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="10402"
+                    label="Music"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="9648"
+                    label="Mystery"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="10749"
+                    label="Romance"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="878"
+                    label="Science Fiction"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="10770"
+                    label="TV Movie"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="53"
+                    label="Thriller"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="10752"
+                    label="War"
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <MyCheckbox
+                    name="genresArray"
+                    type="checkbox"
+                    value="37"
+                    label="Western"
+                  />
+                </Grid>
+
+                <Grid item xs={12} align="center">
+                  <FormControl
+                    color="secondary"
+                    focused={true}
+                    variant="outlined"
+                    className={classes.formControl}
+                  >
+                    <InputLabel focused={true} id="select-sort-label">
+                      Sort By
+                    </InputLabel>
+                    <Select
+                      labelId="select-sort-label"
+                      id="select-sort"
+                      value={sort}
+                      onChange={handleChange}
+                      label="Sort By"
+                    >
+                      <MenuItem value="">
+                        <em>None</em>
+                      </MenuItem>
+                      <MenuItem value="popularity.asc">
+                        Popularity <FontAwesomeIcon icon={faArrowCircleUp} />
+                      </MenuItem>
+                      <MenuItem value="popularity.desc">
+                        Popularity <FontAwesomeIcon icon={faArrowCircleDown} />
+                      </MenuItem>
+                      <MenuItem value="release_date.asc">
+                        Release Date <FontAwesomeIcon icon={faArrowCircleUp} />
+                      </MenuItem>
+                      <MenuItem value="release_date.desc">
+                        Release Date{" "}
+                        <FontAwesomeIcon icon={faArrowCircleDown} />
+                      </MenuItem>
+                      <MenuItem value="revenue.asc">
+                        Revenue <FontAwesomeIcon icon={faArrowCircleUp} />
+                      </MenuItem>
+                      <MenuItem value="revenue.desc">
+                        Revenue <FontAwesomeIcon icon={faArrowCircleDown} />
+                      </MenuItem>
+                      <MenuItem value="vote_average.asc">
+                        Average Votes <FontAwesomeIcon icon={faArrowCircleUp} />
+                      </MenuItem>
+                      <MenuItem value="vote_average.desc">
+                        Average Votes{" "}
+                        <FontAwesomeIcon icon={faArrowCircleDown} />
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} align="center">
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DatePicker
+                      variant="outline"
+                      views={["year", "month"]}
+                      label="Movies Released After"
+                      maxDate={new Date(date)}
+                      value={selectedDateAfter}
+                      onChange={handleDateChangeAfter}
+                    />
+                  </MuiPickersUtilsProvider>
+                </Grid>
+
+                <Grid item xs={12} align="center">
+                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <DatePicker
+                      views={["year", "month"]}
+                      label="Movies Released Before"
+                      minDate={new Date("1900-01-01")}
+                      value={selectedDateBefore}
+                      onChange={handleDateChangeBefore}
+                    />
+                  </MuiPickersUtilsProvider>
+                </Grid>
+              </Grid>
+
+              {/* <div>
+                <p>{JSON.stringify(values, null, 2)}</p>
+              </div> */}
+            </Form>
           )}
-        </React.Fragment>
+        </Formik>
+
         <Copyright />
       </Paper>
     </React.Fragment>
