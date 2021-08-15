@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import { makeStyles } from "@material-ui/core/styles";
+import { Link as RouteLink } from "react-router-dom";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { alpha } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Stepper from "@material-ui/core/Stepper";
+import { Step, StepLabel, StepConnector } from "@material-ui/core";
 import Link from "@material-ui/core/Link";
 import {
   FormControl,
@@ -11,6 +19,7 @@ import {
   InputLabel,
   Select,
   Button,
+  Box,
 } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Typography from "@material-ui/core/Typography";
@@ -26,6 +35,7 @@ import {
   faArrowCircleUp,
 } from "@fortawesome/free-solid-svg-icons";
 import DateFnsUtils from "@date-io/date-fns";
+import Dashboard from "./Dashboard";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const api_key = "e5a142829dadd0a70108fbd4337b0088";
@@ -46,6 +56,29 @@ function Copyright() {
     </Typography>
   );
 }
+
+const CustomConnector = withStyles({
+  alternativeLabel: {
+    top: 10,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
+  },
+  active: {
+    "& $line": {
+      borderColor: "#873e23",
+    },
+  },
+  completed: {
+    "& $line": {
+      borderColor: "#873e23",
+    },
+  },
+  line: {
+    borderColor: "#21130d",
+    borderTopWidth: 3,
+    borderRadius: 1,
+  },
+})(StepConnector);
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -80,6 +113,13 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  media: {
+    height: 513,
+  },
+  root: {
+    maxWidth: 342,
+    backgroundColor: "#21130d",
   },
 }));
 
@@ -131,7 +171,7 @@ export default function Recommendation() {
       });
   };
 
-  const getImage = (path) => `https://image.tmdb.org/t/p/w500/${path}`;
+  const getImage = (path) => `https://image.tmdb.org/t/p/w342/${path}`;
 
   return (
     <React.Fragment>
@@ -146,7 +186,7 @@ export default function Recommendation() {
           Get Your Movie Recommendation
         </Typography>
 
-        <Formik
+        <FormikStepper
           initialValues={{
             genresArray: [],
           }}
@@ -158,274 +198,413 @@ export default function Recommendation() {
             getMovieRec(encodedGenreString);
           }}
         >
-          {({ values, handleBlur, handleSubmit }) => (
-            <Form autoComplete="off" onSubmit={handleSubmit}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="28"
-                    label="Action"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="12"
-                    label="Adventure"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="16"
-                    label="Animation"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="35"
-                    label="Comedy"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="80"
-                    label="Crime"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="99"
-                    label="Documentary"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="18"
-                    label="Drama"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="10751"
-                    label="Family"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="14"
-                    label="Fantasy"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="36"
-                    label="History"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="27"
-                    label="Horror"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="10402"
-                    label="Music"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="9648"
-                    label="Mystery"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="10749"
-                    label="Romance"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="878"
-                    label="Science Fiction"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="10770"
-                    label="TV Movie"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="53"
-                    label="Thriller"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="10752"
-                    label="War"
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <MyCheckbox
-                    name="genresArray"
-                    type="checkbox"
-                    value="37"
-                    label="Western"
-                  />
-                </Grid>
+          <FormikStep label="Choose Genres">
+            <Grid container spacing={2}>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="28"
+                  label="Action"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="12"
+                  label="Adventure"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="16"
+                  label="Animation"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="35"
+                  label="Comedy"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="80"
+                  label="Crime"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="99"
+                  label="Documentary"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="18"
+                  label="Drama"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="10751"
+                  label="Family"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="14"
+                  label="Fantasy"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="36"
+                  label="History"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="27"
+                  label="Horror"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="10402"
+                  label="Music"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="9648"
+                  label="Mystery"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="10749"
+                  label="Romance"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="878"
+                  label="Science Fiction"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="10770"
+                  label="TV Movie"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="53"
+                  label="Thriller"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="10752"
+                  label="War"
+                />
+              </Grid>
+              <Grid item align="center" xs={12} sm={6} md={4} lg={3}>
+                <MyCheckbox
+                  name="genresArray"
+                  type="checkbox"
+                  value="37"
+                  label="Western"
+                />
+              </Grid>
+            </Grid>
+          </FormikStep>
 
-                <Grid item xs={12} align="center">
-                  <FormControl
-                    color="secondary"
-                    focused={true}
-                    variant="outlined"
-                    className={classes.formControl}
+          <FormikStep label="Sort Parameter">
+            <Grid container>
+              <Grid item xs={12} align="center">
+                <FormControl
+                  color="secondary"
+                  focused={true}
+                  variant="outlined"
+                  className={classes.formControl}
+                >
+                  <InputLabel focused={true} id="select-sort-label">
+                    Sort By
+                  </InputLabel>
+                  <Select
+                    labelId="select-sort-label"
+                    id="select-sort"
+                    value={sort}
+                    onChange={handleChange}
+                    label="Sort By"
                   >
-                    <InputLabel focused={true} id="select-sort-label">
-                      Sort By
-                    </InputLabel>
-                    <Select
-                      labelId="select-sort-label"
-                      id="select-sort"
-                      value={sort}
-                      onChange={handleChange}
-                      label="Sort By"
-                    >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value="popularity.asc">
-                        Popularity <FontAwesomeIcon icon={faArrowCircleUp} />
-                      </MenuItem>
-                      <MenuItem value="popularity.desc">
-                        Popularity <FontAwesomeIcon icon={faArrowCircleDown} />
-                      </MenuItem>
-                      <MenuItem value="release_date.asc">
-                        Release Date <FontAwesomeIcon icon={faArrowCircleUp} />
-                      </MenuItem>
-                      <MenuItem value="release_date.desc">
-                        Release Date{" "}
-                        <FontAwesomeIcon icon={faArrowCircleDown} />
-                      </MenuItem>
-                      <MenuItem value="revenue.asc">
-                        Revenue <FontAwesomeIcon icon={faArrowCircleUp} />
-                      </MenuItem>
-                      <MenuItem value="revenue.desc">
-                        Revenue <FontAwesomeIcon icon={faArrowCircleDown} />
-                      </MenuItem>
-                      <MenuItem value="vote_average.asc">
-                        Average Votes <FontAwesomeIcon icon={faArrowCircleUp} />
-                      </MenuItem>
-                      <MenuItem value="vote_average.desc">
-                        Average Votes{" "}
-                        <FontAwesomeIcon icon={faArrowCircleDown} />
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value="popularity.asc">
+                      Popularity <FontAwesomeIcon icon={faArrowCircleUp} />
+                    </MenuItem>
+                    <MenuItem value="popularity.desc">
+                      Popularity <FontAwesomeIcon icon={faArrowCircleDown} />
+                    </MenuItem>
+                    <MenuItem value="release_date.asc">
+                      Release Date <FontAwesomeIcon icon={faArrowCircleUp} />
+                    </MenuItem>
+                    <MenuItem value="release_date.desc">
+                      Release Date <FontAwesomeIcon icon={faArrowCircleDown} />
+                    </MenuItem>
+                    <MenuItem value="revenue.asc">
+                      Revenue <FontAwesomeIcon icon={faArrowCircleUp} />
+                    </MenuItem>
+                    <MenuItem value="revenue.desc">
+                      Revenue <FontAwesomeIcon icon={faArrowCircleDown} />
+                    </MenuItem>
+                    <MenuItem value="vote_average.asc">
+                      Average Votes <FontAwesomeIcon icon={faArrowCircleUp} />
+                    </MenuItem>
+                    <MenuItem value="vote_average.desc">
+                      Average Votes <FontAwesomeIcon icon={faArrowCircleDown} />
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </FormikStep>
 
-                <Grid item xs={12} align="center">
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                      variant="outline"
-                      views={["year", "month"]}
-                      label="Movies Released After"
-                      maxDate={new Date(date)}
-                      value={selectedDateAfter}
-                      onChange={handleDateChangeAfter}
-                    />
-                  </MuiPickersUtilsProvider>
-                </Grid>
-
-                <Grid item xs={12} align="center">
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <DatePicker
-                      views={["year", "month"]}
-                      label="Movies Released Before"
-                      minDate={new Date("1900-01-01")}
-                      value={selectedDateBefore}
-                      onChange={handleDateChangeBefore}
-                    />
-                  </MuiPickersUtilsProvider>
-                </Grid>
+          <FormikStep label="Release Dates">
+            <Grid container spacing={6}>
+              <Grid item xs={12} lg={6} align="center">
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DatePicker
+                    variant="outline"
+                    views={["year", "month"]}
+                    label="Movies Released After"
+                    maxDate={new Date(date)}
+                    value={selectedDateAfter}
+                    onChange={handleDateChangeAfter}
+                  />
+                </MuiPickersUtilsProvider>
               </Grid>
 
-              <div>
-                <Button
-                  size="large"
-                  type="submit"
-                  variant="contained"
-                  color="secondary"
-                  className={classes.submit}
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
-              </div>
+              <Grid item xs={12} lg={6} align="center">
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <DatePicker
+                    views={["year", "month"]}
+                    label="Movies Released Before"
+                    minDate={new Date("1900-01-01")}
+                    value={selectedDateBefore}
+                    onChange={handleDateChangeBefore}
+                  />
+                </MuiPickersUtilsProvider>
+              </Grid>
+            </Grid>
+          </FormikStep>
 
-              {/* <div>
+          <FormikStep label="Results">
+            <Grid container spacing={6}>
+              {movieData.map((movie) => (
+                <Grid item align="center" xs={12} md={6} lg={4}>
+                  <Card className={classes.root}>
+                    <CardActionArea>
+                      <CardMedia className={classes.media}>
+                        <img src={getImage(movie.poster_path)} />
+                      </CardMedia>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {movie.original_title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          {movie.overview}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          </FormikStep>
+
+          {/* <div>
                 <p>{JSON.stringify(values, null, 2)}</p>
               </div> */}
-            </Form>
-          )}
-        </Formik>
-
-        {movieData.map((movie) => (
-          <div>
-            <img src={getImage(movie.poster_path)} />
-            <Typography
-              component="h3"
-              variant="h4"
-              align="center"
-              color="secondary"
-            >
-              {movie.original_title}
-            </Typography>
-          </div>
-        ))}
-
+        </FormikStepper>
         <Copyright />
       </Paper>
     </React.Fragment>
+  );
+}
+
+export interface FormikStepProps {
+  label: string;
+}
+
+export function FormikStep({ children }: FormikStepProps) {
+  return <React.Fragment> {children} </React.Fragment>;
+}
+
+export function FormikStepper({
+  children,
+  ...props
+}: FormikConfig<FormikValues>) {
+  const classes = useStyles();
+  const childrenArray = React.Children.toArray(children);
+  const [step, setStep] = useState(0);
+  const currentChild = childrenArray[step];
+
+  function isLastStep() {
+    return step === childrenArray.length - 1;
+  }
+
+  function isPenultimateStep() {
+    return step === childrenArray.length - 2;
+  }
+
+  return (
+    <Formik
+      {...props}
+      onSubmit={async (values, helpers) => {
+        if (isPenultimateStep()) {
+          await props.onSubmit(values, helpers);
+          setStep((s) => s + 1);
+        } else if (isLastStep()) {
+        } else {
+          setStep((s) => s + 1);
+        }
+      }}
+    >
+      <Form autoComplete="off">
+        <Stepper
+          className={classes.stepper}
+          alternativeLabel
+          activeStep={step}
+          connector={<CustomConnector />}
+        >
+          {childrenArray.map((child) => (
+            <Step key={child.props.label}>
+              <StepLabel>{child.props.label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+
+        {isLastStep() ? (
+          <Grid container justifyContent="center">
+            <Grid item align="center">
+              <Button
+                className={classes.button}
+                size="large"
+                variant="contained"
+                color="secondary"
+                onClick={() => setStep(0)}
+              >
+                Start Over
+              </Button>
+            </Grid>
+            <Grid item align="center">
+              <Button
+                className={classes.button}
+                size="large"
+                variant="contained"
+                color="secondary"
+              >
+                <Link
+                  color="inherit"
+                  component={RouteLink}
+                  to="/"
+                  variant="body1"
+                  underline="none"
+                  style={{ textDecoration: "none" }}
+                >
+                  {"Back to Dashboard"}
+                </Link>
+              </Button>
+            </Grid>
+          </Grid>
+        ) : null}
+        {currentChild}
+        <Grid container>
+          {step > 0 && !isLastStep() ? (
+            <Grid item xs={6} align="center">
+              <Button
+                className={classes.button}
+                size="large"
+                variant="contained"
+                color="secondary"
+                onClick={() => setStep((s) => s - 1)}
+              >
+                Back
+              </Button>
+            </Grid>
+          ) : null}
+
+          {!isLastStep() ? (
+            step > 0 ? (
+              <Grid item xs={6} align="center">
+                <Button
+                  className={classes.button}
+                  size="large"
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                >
+                  {isPenultimateStep() ? "Submit" : "Next"}
+                </Button>
+              </Grid>
+            ) : (
+              <Grid item xs={12} align="center">
+                <Button
+                  className={classes.button}
+                  size="large"
+                  variant="contained"
+                  color="secondary"
+                  type="submit"
+                >
+                  {isPenultimateStep() ? "Submit" : "Next"}
+                </Button>
+              </Grid>
+            )
+          ) : null}
+        </Grid>
+      </Form>
+    </Formik>
   );
 }

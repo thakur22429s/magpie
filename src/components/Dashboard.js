@@ -53,31 +53,7 @@ export default function Dashboard() {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const history = useHistory();
-  //const [movieRec, setMovieRec] = useState("");
   const classes = useStyles();
-  //const api = Axios.create({ baseURL: BASE_URL });
-  //const [data, setData] = useState([]);
-
-  // const getUpcoming = () => {
-  //   api.get("movie/upcoming", { params: { api_key } }).then((response) => {
-  //     setData(response.data.results);
-  //   });
-  // };
-
-  // const getTrendingDaily = () => {
-  //   api.get("trending/all/day", { params: { api_key } }).then((response) => {
-  //     setData(response.data.results);
-  //   });
-  // };
-
-  // const getCertifications = () => {
-  //   api.get("certification/movie/list", { params: { api_key } }).then((response) => {
-  //     console.log(response.data);
-  //     setData(response.data.results);
-  //   });
-  // };
-
-  // const getImage = (path) => `https://image.tmdb.org/t/p/w500/${path}`;
 
   async function handleLogout() {
     setError("");
@@ -131,7 +107,7 @@ export default function Dashboard() {
             to="/recommend"
             variant="body1"
             underline="none"
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: "none" }}
           >
             {"Get Your Recommendation"}
           </Link>
