@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import Axios from "axios";
 import { Link as RouteLink } from "react-router-dom";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { alpha } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Stepper from "@material-ui/core/Stepper";
@@ -19,23 +17,19 @@ import {
   InputLabel,
   Select,
   Button,
-  Box,
 } from "@material-ui/core";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import Typography from "@material-ui/core/Typography";
 import { Form, Formik, useField } from "formik";
 import { Grid } from "@material-ui/core";
-import { object, array } from "yup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { Divider } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowCircleDown,
   faArrowCircleUp,
 } from "@fortawesome/free-solid-svg-icons";
 import DateFnsUtils from "@date-io/date-fns";
-import Dashboard from "./Dashboard";
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const api_key = "e5a142829dadd0a70108fbd4337b0088";
@@ -443,7 +437,10 @@ export default function Recommendation() {
                   <Card className={classes.root}>
                     <CardActionArea>
                       <CardMedia className={classes.media}>
-                        <img src={getImage(movie.poster_path)} />
+                        <img
+                          src={getImage(movie.poster_path)}
+                          alt="Movie Poster"
+                        />
                       </CardMedia>
                       <CardContent>
                         <Typography gutterBottom variant="h5" component="h2">
